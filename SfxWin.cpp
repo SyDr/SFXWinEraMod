@@ -193,45 +193,45 @@ int APIENTRY WinMain2()
     // Execute program if all ok (this copied from SFXSetup project :))
     HANDLE hProcess = 0;
     
-	CAtlString sTemp;
-	sTemp.LoadString(IDS_RUN_PARAMS);
-	UString params;
-	params.SetFromAscii(sTemp.GetString());
-	
-	UString launch = L"%%TTools\\installmod.exe";
-	launch.Replace(L"%%T", fs2us(eo.OutputDir));
+    CAtlString sTemp;
+    sTemp.LoadString(IDS_RUN_PARAMS);
+    UString params;
+    params.SetFromAscii(sTemp.GetString());
+    
+    UString launch = L"%%TTools\\installmod.exe";
+    launch.Replace(L"%%T", fs2us(eo.OutputDir));
 
-	CSysString filePath = GetSystemString(launch);
-	SHELLEXECUTEINFO execInfo;
-	execInfo.cbSize = sizeof(execInfo);
-	execInfo.fMask = SEE_MASK_NOCLOSEPROCESS
-		| SEE_MASK_FLAG_NO_UI /* we don't care successfully it launched or not*/
+    CSysString filePath = GetSystemString(launch);
+    SHELLEXECUTEINFO execInfo;
+    execInfo.cbSize = sizeof(execInfo);
+    execInfo.fMask = SEE_MASK_NOCLOSEPROCESS
+        | SEE_MASK_FLAG_NO_UI /* we don't care successfully it launched or not*/
 #ifndef UNDER_CE
-		| SEE_MASK_FLAG_DDEWAIT
+        | SEE_MASK_FLAG_DDEWAIT
 #endif
-		;
-	execInfo.hwnd = NULL;
-	execInfo.lpVerb = NULL;
-	execInfo.lpFile = filePath;
+        ;
+    execInfo.hwnd = NULL;
+    execInfo.lpVerb = NULL;
+    execInfo.lpFile = filePath;
 
-	CSysString parametersSys = GetSystemString(params);
-	if (parametersSys.IsEmpty())
-		execInfo.lpParameters = NULL;
-	else
-		execInfo.lpParameters = parametersSys;
+    CSysString parametersSys = GetSystemString(params);
+    if (parametersSys.IsEmpty())
+        execInfo.lpParameters = NULL;
+    else
+        execInfo.lpParameters = parametersSys;
 
-	CSysString dirName = GetSystemString(eo.OutputDir);
-	execInfo.lpDirectory = dirName;
-	execInfo.nShow = SW_HIDE; // we don't really need to see it
-	execInfo.hProcess = 0;
-	::ShellExecuteEx(&execInfo);
+    CSysString dirName = GetSystemString(eo.OutputDir);
+    execInfo.lpDirectory = dirName;
+    execInfo.nShow = SW_HIDE; // we don't really need to see it
+    execInfo.hProcess = 0;
+    ::ShellExecuteEx(&execInfo);
 
-	hProcess = execInfo.hProcess;
-	if (hProcess != 0)
-	{
-		WaitForSingleObject(hProcess, INFINITE);
-		::CloseHandle(hProcess);
-	}
+    hProcess = execInfo.hProcess;
+    if (hProcess != 0)
+    {
+        WaitForSingleObject(hProcess, INFINITE);
+        ::CloseHandle(hProcess);
+    }
     // execute program end
     return 0;
   }
